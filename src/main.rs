@@ -2,7 +2,6 @@ extern crate gl;
 extern crate sdl2;
 
 use std::convert::TryInto;
-use std::ffi::{CStr, CString};
 
 pub mod senses;
 
@@ -26,7 +25,6 @@ fn main() {
     let _gl =
         gl::load_with(|s| video_subsystem.gl_get_proc_address(s) as *const std::os::raw::c_void);
 
-    //TODO(stanisz): remove this unsafe block
     unsafe {
         gl::Viewport(
             0,
@@ -36,6 +34,18 @@ fn main() {
         );
         gl::ClearColor(0.3, 0.3, 0.5, 1.0);
     }
+
+    use std::ffi::CString;
+
+    let vertex_shader =
+        senses::Shader::from_vert_source(&CString::new(include_str!("triangle.vs")).unwrap())
+            .unwrap();
+    let fragment_shader =
+        senses::Shader::from_frag_source(&CString::new(include_str!("triangle.fs")).unwrap())
+            .unwrap();
+
+    let shader_program = senses::Program::from_shaders(&[vertex_shader, fragment_shader]).unwrap();
+    shader_program.set_used();
 
     let mut event_pump = sdl.event_pump().unwrap();
     'game_loop: loop {
