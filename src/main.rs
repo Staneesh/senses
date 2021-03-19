@@ -26,12 +26,6 @@ fn main() {
         gl::load_with(|s| video_subsystem.gl_get_proc_address(s) as *const std::os::raw::c_void);
 
     unsafe {
-        gl::Viewport(
-            0,
-            0,
-            window_width.try_into().unwrap(),
-            window_height.try_into().unwrap(),
-        );
         gl::ClearColor(0.3, 0.3, 0.5, 1.0);
     }
 
@@ -45,7 +39,43 @@ fn main() {
             .unwrap();
 
     let shader_program = senses::Program::from_shaders(&[vertex_shader, fragment_shader]).unwrap();
-    shader_program.set_used();
+
+    let vertices: Vec<f32> = vec![-0.5, -0.5, 0.0, 0.5, -0.5, 0.0, 0.0, 0.5, 0.0];
+
+    let mut vbo: gl::types::GLuint = 0;
+    unsafe {
+        gl::GenBuffers(1, &mut vbo);
+    }
+
+    unsafe {
+        gl::BindBuffer(gl::ARRAY_BUFFER, vbo);
+        gl::BufferData(
+            gl::ARRAY_BUFFER,
+            (vertices.len() * std::mem::size_of::<f32>()) as gl::types::GLsizeiptr,
+            vertices.as_ptr() as *const gl::types::GLvoid,
+            gl::STATIC_DRAW,
+        );
+        gl::BindBuffer(gl::ARRAY_BUFFER, 0);
+    }
+
+    let mut vao: gl::types::GLuint = 0;
+    unsafe {
+        gl::GenVertexArrays(1, &mut vao);
+        gl::BindVertexArray(vao);
+        gl::BindBuffer(gl::ARRAY_BUFFER, vbo);
+        gl::EnableVertexAttribArray(0);
+        gl::VertexAttribPointer(
+            0,
+            3,
+            gl::FLOAT,
+            gl::FALSE,
+            (3 * std::mem::size_of::<f32>()) as gl::types::GLint,
+            std::ptr::null(),
+        );
+
+        gl::BindBuffer(gl::ARRAY_BUFFER, 0);
+        gl::BindVertexArray(0);
+    }
 
     let mut event_pump = sdl.event_pump().unwrap();
     'game_loop: loop {
@@ -65,7 +95,22 @@ fn main() {
         }
 
         unsafe {
+            gl::Viewport(
+                0,
+                0,
+                window_width.try_into().unwrap(),
+                window_height.try_into().unwrap(),
+            );
+        }
+
+        unsafe {
             gl::Clear(gl::COLOR_BUFFER_BIT);
+        }
+
+        shader_program.set_used();
+        unsafe {
+            gl::BindVertexArray(vao);
+            gl::DrawArrays(gl::TRIANGLES, 0, 3);
         }
 
         window.gl_swap_window();
