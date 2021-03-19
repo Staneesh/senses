@@ -6,7 +6,4 @@ edition = "2018"
 
 [dependencies]
 sdl2 = "0.34.0"
-gl = { path = "lib/gl" }
-
-[features]
-gl_debug = ["gl/debug"]
+gl = "0.14.0"
