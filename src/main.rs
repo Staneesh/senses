@@ -2,10 +2,15 @@ extern crate gl;
 extern crate sdl2;
 
 use std::convert::TryInto;
+//use resources::Resources;
+use std::path::Path;
 
 pub mod senses;
+//pub mod resources;
 
 fn main() {
+    //let res = Resources::from_relative_exe_path(Path::new("assets")).unwrap();
+
     let sdl = sdl2::init().unwrap();
     let video_subsystem = sdl.video().unwrap();
 
