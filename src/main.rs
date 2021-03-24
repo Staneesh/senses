@@ -31,12 +31,14 @@ fn main() {
 
     use std::ffi::CString;
 
-    let vertex_shader =
-        senses::Shader::from_vert_source(&CString::new(include_str!("triangle.vs")).unwrap())
-            .unwrap();
-    let fragment_shader =
-        senses::Shader::from_frag_source(&CString::new(include_str!("triangle.fs")).unwrap())
-            .unwrap();
+    let vertex_shader = senses::Shader::from_vert_source(
+        &CString::new(include_str!("../assets/shaders/triangle.vs")).unwrap(),
+    )
+    .unwrap();
+    let fragment_shader = senses::Shader::from_frag_source(
+        &CString::new(include_str!("../assets/shaders/triangle.fs")).unwrap(),
+    )
+    .unwrap();
 
     let shader_program = senses::Program::from_shaders(&[vertex_shader, fragment_shader]).unwrap();
 
