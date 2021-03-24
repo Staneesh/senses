@@ -1,15 +1,15 @@
 extern crate gl;
 extern crate sdl2;
 
+use resources::Resources;
 use std::convert::TryInto;
-//use resources::Resources;
 use std::path::Path;
 
+pub mod resources;
 pub mod senses;
-//pub mod resources;
 
 fn main() {
-    //let res = Resources::from_relative_exe_path(Path::new("assets")).unwrap();
+    let res = Resources::from_relative_exe_path(Path::new("assets")).unwrap();
 
     let sdl = sdl2::init().unwrap();
     let video_subsystem = sdl.video().unwrap();
@@ -43,7 +43,7 @@ fn main() {
         senses::Shader::from_frag_source(&CString::new(include_str!("triangle.fs")).unwrap())
             .unwrap();
 
-    let shader_program = senses::Program::from_shaders(&[vertex_shader, fragment_shader]).unwrap();
+    let shader_program = senses::Program::from_resources(&res, "shaders/triangle").unwrap();
 
     let vertices: Vec<f32> = vec![-0.5, -0.5, 0.0, 0.5, -0.5, 0.0, 0.0, 0.5, 0.0];
 
