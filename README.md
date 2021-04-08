@@ -6,6 +6,7 @@
 	<a href="https://github.com/Staneesh/senses/blob/main/LICENSE" alt="License">
         <img src="https://img.shields.io/github/license/Staneesh/senses" /></a>
 </p>
+
 # senses
 Top-down, hack an slash action game coded in Rust programming language
 
