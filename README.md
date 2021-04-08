@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://github.com/Staneesh/senses/stargazers" alt="Stars">
-        <img src="https://img.shields.io/github/stars/Staneesh/senses /></a>
+        <img src="https://img.shields.io/github/stars/Staneesh/senses" /></a>
 </p>
 
 # senses
